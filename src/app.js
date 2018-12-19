@@ -14,7 +14,6 @@ const jsx=(
         <AppRouter/>
     </Provider>
 )
-
 const appRoot = document.getElementById("app")
 
 ReactDOM.render(jsx, appRoot)
