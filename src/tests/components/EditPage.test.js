@@ -7,11 +7,11 @@
     import {EditPage} from '../../components/EditPage'
     
 
-    let editExpense, removeExpense, wrapper, history
+    let editExpense, startRemoveExpense, wrapper, history
 
     beforeEach(()=>{
          editExpense=jest.fn()
-         removeExpense=jest.fn()
+         startRemoveExpense=jest.fn()
          history={
              push: jest.fn()
          }
@@ -19,7 +19,7 @@
              <EditPage 
                 history={history} 
                 editExpense={editExpense} 
-                removeExpense={removeExpense} 
+                startRemoveExpense={startRemoveExpense} 
                 expense={expenses[2]}
             />
         )
@@ -29,7 +29,7 @@
     test('Should render edit expense page with snapshot',()=>{
         expect(wrapper).toMatchSnapshot()
     })
-
+ 
     test('Should handle edit expense correctly, running spy', ()=>{
        wrapper.find('ExpenseForm').prop('onSubmit')(expenses[2])
        expect(history.push).toHaveBeenLastCalledWith('/')
@@ -39,5 +39,5 @@
     test('Should handle remove expense with spy', ()=>{
         wrapper.find("button").simulate('click')
         expect(history.push).toHaveBeenLastCalledWith('/')
-        expect(removeExpense).toHaveBeenLastCalledWith({id:expenses[2].id})
+        expect(startRemoveExpense).toHaveBeenLastCalledWith({id:expenses[2].id})
     })
