@@ -1,10 +1,18 @@
-import {addExpense, removeExpense, editExpense, startAddExpense} from '../../actions/expenses'
+import {addExpense, removeExpense, editExpense, startAddExpense, setExpenses, startSetExpenses} from '../../actions/expenses'
 import expenses from '../fixtures/expenses'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import {database} from '../../firebase/firebase'
 
 const createMockStore = configureMockStore([thunk]) 
+
+beforeEach((done)=>{
+    const expensesData={}
+    expenses.forEach(({id, description, amount, createdAt, notes})=>{
+        expensesData[id]={description, amount, createdAt, notes}
+    })
+    database.ref('expenses').set(expensesData).then(()=>done())
+})
 
 test('should remove expense action object', ()=>{
     const action=removeExpense({id: 'abdceft'})
@@ -39,6 +47,14 @@ test('should edit expense action object', ()=>{
 //         }
 //     })
 // })
+
+test('should setup set expense action object with data', ()=>{
+    const action = setExpenses(expenses)
+    expect(action).toEqual({
+       type: 'SET_EXPENSES', 
+       expenses 
+    })
+})
 
 test('should add expense action object', ()=>{
     const action=addExpense(expenses[2])
@@ -78,7 +94,7 @@ test('should add expense with defaults to database and store', ()=>{
     const expenseData={}
     const estimateData={
         amount: 0,
-        description: '',
+        description: '', 
         createdAt: 0,
         note: ''
     }
@@ -94,6 +110,18 @@ test('should add expense with defaults to database and store', ()=>{
         return database.ref(`expenses/${actions[0].expense.id}`).once('value')
     }).then((snapshot)=>{
         expect(snapshot.val()).toEqual(estimateData)
+        done()
+    })
+})
+
+test('Should fetch the expenses from firebase', (done)=>{
+    const store=createMockStore({})
+    store.dispatch(startSetExpenses()).then(()=>{
+        const actions=store.getActions()
+        expect(actions[0]).toEqual({
+            type: 'SET_EXPENSES',
+            expenses
+        })
         done()
     })
 })

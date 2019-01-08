@@ -12,7 +12,7 @@ test('Should accurately remove an expense by id',()=>{
         id: '2'
     }
     const state=expensesReducer(expenses, action)
-    expect(state).toEqual([expenses[0], expenses[2]])
+    expect(state).toEqual([expenses[0], expenses[2]]) 
 })
 
 test('Should not remove any expenses when an invalid id is given',()=>{
@@ -68,4 +68,13 @@ test('should not edit an expense if id is not valid',()=>{
     }
     const state=expensesReducer(expenses, action)
     expect(state).toEqual(expenses)
+})
+
+test('Should set expenses', ()=>{
+    const action={
+        type: 'SET_EXPENSES',
+        expenses: [expenses[1]]
+    }
+    const state=expensesReducer(expenses, action)
+    expect(state).toEqual([expenses[1]])
 })
