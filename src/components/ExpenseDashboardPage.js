@@ -6,10 +6,9 @@ import ConnectedExpenseSummary from './ExpenseSummary'
 const ExpenseDashboardPage = () =>{
     return(
     <div>
-        <p>This is my expense dashboard page</p>   
-        <ConnectedExpenseList/>
+        <ConnectedExpenseSummary/> 
         <ConnectedExpenseListFilters/>
-        <ConnectedExpenseSummary/>
+        <ConnectedExpenseList/>
     </div>
     )
 }
